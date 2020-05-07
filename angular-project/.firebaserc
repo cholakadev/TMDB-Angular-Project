@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "custom-movie-database": {
+      "hosting": {
+        "angular-project": [
+          "custom-movie-database"
+        ]
+      }
+    }
+  }
+}
