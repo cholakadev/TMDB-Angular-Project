@@ -1,12 +1,7 @@
-import { MoviesModule } from './pages/movies/movies.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { MoviesListComponent } from './pages/movies/movies-list/movies-list.component';
-import { TvSeriesListComponent } from './pages/tv-series/tv-series-list/tv-series-list.component';
 import { PeopleListComponent } from './pages/people/people-list/people-list.component';
-import { MovieDetailsComponent } from './pages/movies/movie-details/movie-details.component';
-import { TvShowDetailsComponent } from './pages/tv-series/tv-show-details/tv-show-details.component';
 import { PeopleDetailsComponent } from './pages/people/people-details/people-details.component';
 import { AuthComponent } from './pages/auth/auth.component';
 
@@ -26,15 +21,11 @@ const routes: Routes = [
   },
   {
     path: 'tv-series',
-    component: TvSeriesListComponent
+    loadChildren: () => import('./pages/tv-series/tv-series.module').then(m => m.TvSeriesModule)
   },
   {
     path: 'people',
     component: PeopleListComponent
-  },
-  {
-    path: 'tv-series/:id',
-    component: TvShowDetailsComponent
   },
   {
     path: 'people/:id',
