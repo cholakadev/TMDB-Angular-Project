@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IMovie } from 'src/app/interfaces/movie';
 import { Router } from '@angular/router';
+import { faList, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-movies-list-item',
@@ -9,10 +10,23 @@ import { Router } from '@angular/router';
 })
 export class MoviesListItemComponent {
   @Input() movie: IMovie;
+  @Output() addedToWatchlist = new EventEmitter<IMovie>();
+  @Output() addedToFavorite = new EventEmitter<IMovie>();
 
-  constructor(private router: Router) {}
+  faList = faList;
+  faHeart = faHeart;
+
+  constructor(private router: Router) { }
 
   redirect() {
     this.router.navigate(['/movies', this.movie.id]);
+  }
+
+  addToWatchlist() {
+    this.addedToWatchlist.emit(this.movie);
+  }
+
+  addToFavorite() {
+    this.addedToFavorite.emit(this.movie);
   }
 }

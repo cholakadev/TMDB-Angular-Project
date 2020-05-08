@@ -14,7 +14,6 @@ import {
 })
 export class MoviesListComponent implements OnInit {
   movies: IMovie[];
-
   searchText: '';
 
   filterSettings = {

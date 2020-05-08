@@ -1,3 +1,4 @@
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgModule } from '@angular/core';
 
 import { MoviesRoutingModule } from './movies-routing.module';
@@ -20,6 +21,7 @@ import { MoviesComponent } from './movies.component';
   imports: [
     MoviesRoutingModule,
     SharedModule,
+    FontAwesomeModule,
   ]
 })
 export class MoviesModule { }
