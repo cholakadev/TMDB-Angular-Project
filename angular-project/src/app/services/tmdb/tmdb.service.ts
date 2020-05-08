@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-  IDiscoverMovieResponse,
-  IDiscoverTvShowsResponse,
-  IDiscoverPeopleResponse,
+  IDiscoverPageContent,
   IPersonCombinedCreditsResponse,
 } from 'src/app/interfaces/response';
 import { Observable } from 'rxjs';
@@ -11,7 +9,7 @@ import { IMovie } from 'src/app/interfaces/movie';
 import { environment } from 'src/environments/environment';
 import { ITvSerie } from 'src/app/interfaces/tvseries';
 import { ISelectOption } from 'src/app/interfaces/select-option';
-import { IPersonDetails } from 'src/app/interfaces/person';
+import { IPersonDetails, IPerson } from 'src/app/interfaces/person';
 
 export const TMDB_SORTING_OPTIONS: ISelectOption[] = [
   {
@@ -71,8 +69,8 @@ export class TmdbService {
     return `${this._BASE_URL}${endpoint}?api_key=${this._API_KEY}&${queryParams}`;
   }
 
-  discoverMovie(params: any): Observable<IDiscoverMovieResponse> {
-    return this.httpClient.get<IDiscoverMovieResponse>(
+  discoverMovie(params: any): Observable<IDiscoverPageContent<IMovie>> {
+    return this.httpClient.get<IDiscoverPageContent<IMovie>>(
       this.UrlBuilder('/discover/movie', params)
     );
   }
@@ -83,8 +81,8 @@ export class TmdbService {
     );
   }
 
-  discoverTvShow(params: any): Observable<IDiscoverTvShowsResponse> {
-    return this.httpClient.get<IDiscoverTvShowsResponse>(
+  discoverTvShow(params: any): Observable<IDiscoverPageContent<ITvSerie>> {
+    return this.httpClient.get<IDiscoverPageContent<ITvSerie>>(
       this.UrlBuilder('/discover/tv', params)
     );
   }
@@ -95,8 +93,8 @@ export class TmdbService {
     );
   }
 
-  discoverPeople(): Observable<IDiscoverPeopleResponse> {
-    return this.httpClient.get<IDiscoverPeopleResponse>(
+  discoverPeople(): Observable<IDiscoverPageContent<IPerson>> {
+    return this.httpClient.get<IDiscoverPageContent<IPerson>>(
       `${this._BASE_URL}/person/popular?api_key=${this._API_KEY}`
     );
   }

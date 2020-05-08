@@ -1,3 +1,4 @@
+import { PeopleModule } from './pages/people/people.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
@@ -25,12 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'people',
-    component: PeopleListComponent
+    loadChildren: () => import('./pages/people/people.module').then(m => m.PeopleModule)
   },
-  {
-    path: 'people/:id',
-    component: PeopleDetailsComponent
-  }
 ];
 
 @NgModule({

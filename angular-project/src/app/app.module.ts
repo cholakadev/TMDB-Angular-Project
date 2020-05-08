@@ -8,10 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './pages/home/home.component';
-import { PeopleListComponent } from './pages/people/people-list/people-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PeopleListItemComponent } from './pages/people/people-list-item/people-list-item.component';
-import { PeopleDetailsComponent } from './pages/people/people-details/people-details.component';
 import { FilterPipe } from './pipes/filter/filter.pipe';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -21,11 +18,7 @@ import { AuthComponent } from './pages/auth/auth.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    PeopleListComponent,
-    PeopleListItemComponent,
-    PeopleDetailsComponent,
     AuthComponent,
-    FilterPipe,
   ],
   imports: [
     BrowserModule,

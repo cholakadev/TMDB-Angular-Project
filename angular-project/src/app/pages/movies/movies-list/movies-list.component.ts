@@ -8,6 +8,7 @@ import {
 } from 'src/app/services/tmdb/tmdb.service';
 import { DataStorageService } from 'src/app/services/data-storage/data-storage.service';
 import { IUser } from 'src/app/interfaces/user';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-movies-list',
@@ -27,7 +28,8 @@ export class MoviesListComponent implements OnInit {
 
   constructor(
     private tmdbService: TmdbService,
-    private dataStorageService: DataStorageService) { }
+    private dataStorageService: DataStorageService,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.tmdbService
@@ -35,6 +37,10 @@ export class MoviesListComponent implements OnInit {
       .subscribe((response) => {
         this.movies = response.results;
       });
+
+    this.authService.userState.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   onGenreChanged(value: string): void {
@@ -65,6 +71,7 @@ export class MoviesListComponent implements OnInit {
   }
 
   addToWatchlist(movie: IMovie): void {
+    console.log(this.currentUser.uid);
     this.dataStorageService.addMediaToWatchlist(movie, this.currentUser.uid, (error) => {
       if (error) {
         console.log(error);
@@ -75,6 +82,7 @@ export class MoviesListComponent implements OnInit {
   }
 
   addToFavorites(movie: IMovie): void {
+    console.log(this.currentUser.uid);
     this.dataStorageService.addMediaToFavorite(movie, this.currentUser.uid, (error) => {
       if (error) {
         console.log(error);

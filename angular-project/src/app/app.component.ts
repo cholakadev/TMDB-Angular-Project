@@ -11,6 +11,8 @@ import { Subject } from 'rxjs';
 })
 export class AppComponent {
 
+  isShown: boolean = false;
+
   user: IUser;
 
   destroyed$: Subject<boolean> = new Subject<boolean>();
@@ -28,13 +30,13 @@ export class AppComponent {
     this._router.navigate(['/auth']);
   }
 
-
-  redirect(): void {
-    this._router.navigate(['/authentication']);
+  logIn(): void {
+    this._router.navigate(['/auth']);
   }
 
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
 }

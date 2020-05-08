@@ -1,29 +1,11 @@
-import { IMovie } from './movie';
-import { ITvSerie } from './tvseries';
-import { IPerson } from './person';
-
-export interface IDiscoverMovieResponse {
+export interface IDiscoverPageContent<T> {
     page: number;
     total_results: number;
     total_pages: number;
-    results: IMovie[] 
+    results: T[];
 }
 
-export interface IDiscoverTvShowsResponse {
-    page: number;
-    total_results: number;
-    total_pages: number;
-    results: ITvSerie[] 
-}
-
-export interface IDiscoverPeopleResponse {
-    page: number;
-    total_results: number;
-    total_pages: number;
-    results: IPerson[] 
-}
-
-export interface IPersonCredit{
+export interface IPersonCredit {
     id: number;
     department: string;
     original_language: string;
@@ -44,7 +26,7 @@ export interface IPersonCredit{
     credit_id: string;
 }
 
-export interface IPersonCombinedCreditsResponse{
+export interface IPersonCombinedCreditsResponse {
     id: number;
     crew: Array<IPersonCredit>;
     cast: Array<IPersonCredit>;

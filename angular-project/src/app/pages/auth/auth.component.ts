@@ -19,12 +19,11 @@ export class AuthComponent implements OnInit {
   constructor(private _authService: AuthService, private _router: Router) { }
 
   logInWithGoogle() {
-    console.log('logged with google');
     this._authService.loginWithOauth('google');
+    this._router.navigate(['/movies']);
   }
 
   onSubmitLoginForm() {
-    console.log('logged in!');
     this._authService.loginWithEmailAndPassword(
       this.loginForm.value,
       (error) => {
@@ -38,7 +37,6 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmitRegisterForm() {
-    console.log('registered!');
     this._authService.registerWithEmailAndPassword(
       this.registerForm.value,
       (error) => {

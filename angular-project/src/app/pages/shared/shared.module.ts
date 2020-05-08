@@ -8,7 +8,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 @NgModule({
     declarations: [
         FiltersComponent,
-        ImgFallbackDirective
+        ImgFallbackDirective,
     ],
     exports: [
         BsDropdownModule,
