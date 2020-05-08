@@ -1,5 +1,3 @@
-import { FilterPipe } from './../../pipes/filter/filter.pipe';
-import { MoviesFiltersComponent } from './movies-filters/movies-filters.component';
 import { NgModule } from '@angular/core';
 
 import { MoviesRoutingModule } from './movies-routing.module';
@@ -16,7 +14,6 @@ import { MoviesComponent } from './movies.component';
     MoviesListComponent,
     MoviesListItemComponent,
     MovieDetailsComponent,
-    MoviesFiltersComponent,
     MoviesFilterPipe,
     MoviesComponent,
   ],
