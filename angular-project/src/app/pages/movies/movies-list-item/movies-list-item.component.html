@@ -2,8 +2,12 @@
   <img class="card-img-top" src="https://image.tmdb.org/t/p/w220_and_h330_face/{{ movie.poster_path }}"
     alt="{{ movie.title }}" appImgFallback />
   <div class="d-flex options">
-    <fa-icon [icon]="faList" (click)="addToWatchlist(); $event.stopPropagation()"></fa-icon>
-    <fa-icon [icon]="faHeart" (click)="addToFavorite(); $event.stopPropagation()"></fa-icon>
+    <i>
+      <fa-icon [icon]="faList" (click)="addToWatchlist(); $event.stopPropagation()"></fa-icon>
+    </i>
+    <i>
+      <fa-icon [icon]="faHeart" (click)="addToFavorite(); $event.stopPropagation()"></fa-icon>
+    </i>
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ movie.title }}</h5>

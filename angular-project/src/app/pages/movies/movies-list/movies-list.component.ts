@@ -6,6 +6,8 @@ import {
   TMDB_YEARS_OPTIONS,
   TMDB_GENRE_OPTIONS,
 } from 'src/app/services/tmdb/tmdb.service';
+import { DataStorageService } from 'src/app/services/data-storage/data-storage.service';
+import { IUser } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-movies-list',
@@ -15,6 +17,7 @@ import {
 export class MoviesListComponent implements OnInit {
   movies: IMovie[];
   searchText: '';
+  currentUser: IUser;
 
   filterSettings = {
     sort_by: TMDB_SORTING_OPTIONS[0].value.toString(),
@@ -22,7 +25,9 @@ export class MoviesListComponent implements OnInit {
     with_genres: TMDB_GENRE_OPTIONS[0].value.toString(),
   };
 
-  constructor(private tmdbService: TmdbService) { }
+  constructor(
+    private tmdbService: TmdbService,
+    private dataStorageService: DataStorageService) { }
 
   ngOnInit(): void {
     this.tmdbService
@@ -57,5 +62,25 @@ export class MoviesListComponent implements OnInit {
       .subscribe((response) => {
         this.movies = response.results;
       });
+  }
+
+  addToWatchlist(movie: IMovie): void {
+    this.dataStorageService.addMediaToWatchlist(movie, this.currentUser.uid, (error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Added to Watchlist');
+      }
+    });
+  }
+
+  addToFavorites(movie: IMovie): void {
+    this.dataStorageService.addMediaToFavorite(movie, this.currentUser.uid, (error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Added to Favorites');
+      }
+    });
   }
 }
