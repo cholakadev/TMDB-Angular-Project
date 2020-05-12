@@ -6,6 +6,14 @@ import {
   TMDB_YEARS_OPTIONS,
   TMDB_GENRE_OPTIONS,
 } from 'src/app/services/tmdb/tmdb.service';
+import { Store, select } from '@ngrx/store';
+import { ITvShowsState } from '../tv-series-store';
+import { Observable, Subject } from 'rxjs';
+import { IUser } from 'src/app/interfaces/user';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { takeUntil } from 'rxjs/operators';
+import { selectTvShow, selectError } from '../tv-series-store/tv-series.selectors';
+import * as tvShowActions from '../tv-series-store/tv-series.actions';
 
 @Component({
   selector: 'app-tv-series-list',
@@ -13,7 +21,13 @@ import {
   styleUrls: ['./tv-series-list.component.scss'],
 })
 export class TvSeriesListComponent implements OnInit {
-  tvseries: ITvSerie[];
+
+  tvseries$: Observable<ITvSerie[]>;
+  errorMessage$: Observable<string>;
+  currentUser: IUser;
+  searchText: '';
+
+  destroyed$: Subject<boolean> = new Subject<boolean>();
 
   filterSettings = {
     sort_by: TMDB_SORTING_OPTIONS[0].value.toString(),
@@ -21,40 +35,43 @@ export class TvSeriesListComponent implements OnInit {
     with_genres: TMDB_GENRE_OPTIONS[0].value.toString(),
   };
 
-  constructor(private tmdbService: TmdbService) {}
+  constructor(
+    private _tmdbService: TmdbService,
+    private _store: Store<ITvShowsState>,
+    private _authService: AuthService) { }
 
   ngOnInit(): void {
-    this.tmdbService
-      .discoverTvShow(this.filterSettings)
-      .subscribe((response) => {
-        this.tvseries = response.results;
-      });
+    this.getTvShows();
+
+    this._authService.userState.pipe(takeUntil(this.destroyed$)).subscribe(user => {
+      this.currentUser = user;
+    });
+    this.tvseries$ = this._store.pipe(select(selectTvShow));
+    this.errorMessage$ = this._store.pipe(select(selectError));
   }
 
-  onGenreChanged(value: string) {
-    this.filterSettings.with_genres = value;
-    this.tmdbService
-      .discoverTvShow(this.filterSettings)
-      .subscribe((response) => {
-        this.tvseries = response.results;
-      });
+  onGenreChanged(genre: string): void {
+    this.filterSettings = { ...this.filterSettings, with_genres: genre };
+    this.getTvShows();
   }
 
-  onYearsChanged(value: string) {
-    this.filterSettings.first_air_date = value;
-    this.tmdbService
-      .discoverTvShow(this.filterSettings)
-      .subscribe((response) => {
-        this.tvseries = response.results;
-      });
+  onSortByChanged(sortBy: string): void {
+    this.filterSettings = { ...this.filterSettings, sort_by: sortBy };
+    this.getTvShows();
   }
 
-  onSortByChanged(value: string) {
-    this.filterSettings.sort_by = value;
-    this.tmdbService
-      .discoverTvShow(this.filterSettings)
-      .subscribe((response) => {
-        this.tvseries = response.results;
-      });
+  onYearChanged(airDate: string): void {
+    this.filterSettings = { ...this.filterSettings, first_air_date: airDate };
+    this.getTvShows();
   }
+
+  getTvShows() {
+    this._store.dispatch(tvShowActions.loadShows({ filters: this.filterSettings }));
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
 }

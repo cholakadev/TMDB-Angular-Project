@@ -1,8 +1,11 @@
-// import { SharedModule } from './../../shared-modules/shared.module';
+import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import * as authActions from './auth-store/auth.actions';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { IAuthState } from './auth-store';
 
 @Component({
   selector: 'app-auth',
@@ -16,14 +19,18 @@ export class AuthComponent implements OnInit {
   loginFormError = '';
   registerFormError = '';
 
-  constructor(private _authService: AuthService, private _router: Router) { }
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+    private _angularFireAuth: AngularFireAuth,
+    private _store: Store<IAuthState>) { }
 
-  logInWithGoogle() {
-    this._authService.loginWithOauth('google');
-    this._router.navigate(['/movies']);
+  logInWithGoogle(): void {
+    this._angularFireAuth.authState.subscribe(r => console.log(r));
+    this._store.dispatch(authActions.logInWithOauth({ provider: 'google' }));
   }
 
-  onSubmitLoginForm() {
+  onSubmitLoginForm(): void {
     this._authService.loginWithEmailAndPassword(
       this.loginForm.value,
       (error) => {
@@ -36,7 +43,7 @@ export class AuthComponent implements OnInit {
     );
   }
 
-  onSubmitRegisterForm() {
+  onSubmitRegisterForm(): void {
     this._authService.registerWithEmailAndPassword(
       this.registerForm.value,
       (error) => {
@@ -55,7 +62,9 @@ export class AuthComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email]),
     });
 
     this.registerForm = new FormGroup({
@@ -63,7 +72,9 @@ export class AuthComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email]),
     });
   }
 }

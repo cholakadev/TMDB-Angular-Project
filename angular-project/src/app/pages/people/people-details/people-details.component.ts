@@ -17,26 +17,26 @@ export class PeopleDetailsComponent implements OnInit {
     cast: IPersonCredit[];
     crew: IPersonCredit[];
   } = {
-    cast: [],
-    crew: [],
-  };
+      cast: [],
+      crew: [],
+    };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private tmdbService: TmdbService,
-    private router: Router
+    private _activatedRoute: ActivatedRoute,
+    private _tmdbService: TmdbService,
+    private _router: Router
   ) {
-    this.routerParameterId = activatedRoute.snapshot.params.id;
+    this.routerParameterId = _activatedRoute.snapshot.params.id;
   }
 
   ngOnInit(): void {
-    this.tmdbService
+    this._tmdbService
       .personDetails(this.routerParameterId)
       .subscribe((response) => {
         this.person = response;
       });
 
-    this.tmdbService
+    this._tmdbService
       .personCombinedCredits(this.routerParameterId)
       .subscribe((response) => {
         this.credits = {
@@ -46,8 +46,8 @@ export class PeopleDetailsComponent implements OnInit {
       });
   }
 
-  redirectToMedia(mediaType: string, castId) {
+  redirectToMedia(mediaType: string, castId): void {
     const route = mediaType === 'movie' ? '/movies' : '/tv-shows';
-    this.router.navigate([route, castId]);
+    this._router.navigate([route, castId]);
   }
 }

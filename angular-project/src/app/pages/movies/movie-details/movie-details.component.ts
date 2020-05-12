@@ -10,16 +10,16 @@ import { TmdbService } from 'src/app/services/tmdb/tmdb.service';
 })
 export class MovieDetailsComponent implements OnInit {
   movies: IMovie;
-  routerParameterId: number;
+  routeParameterId: number;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private tmdbService: TmdbService
+    private _activatedRoute: ActivatedRoute,
+    private _tmdbService: TmdbService
   ) {
-    this.routerParameterId = activatedRoute.snapshot.params.id;
+    this.routeParameterId = _activatedRoute.snapshot.params.id;
   }
   ngOnInit(): void {
-    this.tmdbService.movie(this.routerParameterId).subscribe((response) => {
+    this._tmdbService.movie(this.routeParameterId).subscribe((response) => {
       this.movies = response;
     });
   }

@@ -4,7 +4,8 @@
     <input class="form-control" placeholder="search here..." [(ngModel)]="searchText" />
   </div>
   <div class="container-fluid people-list">
-    <app-people-list-item *ngFor="let person of people | searchTextFilter: searchText" [person]="person">
+    <app-people-list-item *ngFor="let person of people$ | async | searchTextFilter: searchText: 'name'"
+      [person]="person">
     </app-people-list-item>
   </div>
 </div>

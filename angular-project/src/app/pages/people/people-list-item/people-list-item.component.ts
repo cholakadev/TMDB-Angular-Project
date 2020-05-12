@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 export class PeopleListItemComponent implements OnInit {
   @Input() person: IPerson;
 
-  constructor(private router: Router) {}
+  constructor(
+    private _router: Router) { }
 
   ngOnInit(): void {
     this.formattedKnownFor();
@@ -25,7 +26,7 @@ export class PeopleListItemComponent implements OnInit {
       .join(', ');
   }
 
-  redirect() {
-    this.router.navigate(['/people', this.person.id]);
+  redirect(): void {
+    this._router.navigate(['/people', this.person.id]);
   }
 }

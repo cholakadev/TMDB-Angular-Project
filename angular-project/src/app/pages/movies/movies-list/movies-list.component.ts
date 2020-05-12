@@ -1,3 +1,5 @@
+import { takeUntil } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { IMovie } from 'src/app/interfaces/movie';
 import {
@@ -9,6 +11,10 @@ import {
 import { DataStorageService } from 'src/app/services/data-storage/data-storage.service';
 import { IUser } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { IMoviesState } from '../movies-store';
+import * as movieActions from '../movies-store/movie.actions'
+import { selectMovies, selectError } from '../movies-store/movie.selectors';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-movies-list',
@@ -20,6 +26,11 @@ export class MoviesListComponent implements OnInit {
   searchText: '';
   currentUser: IUser;
 
+  movies$: Observable<IMovie[]>;
+  errorMessage$: Observable<string>;
+
+  destroyed$: Subject<boolean> = new Subject<boolean>();
+
   filterSettings = {
     sort_by: TMDB_SORTING_OPTIONS[0].value.toString(),
     primary_release_year: TMDB_YEARS_OPTIONS[0].value.toString(),
@@ -27,52 +38,40 @@ export class MoviesListComponent implements OnInit {
   };
 
   constructor(
-    private tmdbService: TmdbService,
-    private dataStorageService: DataStorageService,
-    private authService: AuthService) { }
+    private _tmdbService: TmdbService,
+    private _dataStorageService: DataStorageService,
+    private _authService: AuthService,
+    private _store: Store<IMoviesState>) { }
 
   ngOnInit(): void {
-    this.tmdbService
-      .discoverMovie(this.filterSettings)
-      .subscribe((response) => {
-        this.movies = response.results;
-      });
+    this._store.dispatch(movieActions.loadMovies({ filters: this.filterSettings }));
 
-    this.authService.userState.subscribe(user => {
+    this._authService.userState.pipe(takeUntil(this.destroyed$)).subscribe(user => {
       this.currentUser = user;
     });
+
+    this.movies$ = this._store.pipe(select(selectMovies));
+    this.errorMessage$ = this._store.pipe(select(selectError));
   }
 
-  onGenreChanged(value: string): void {
-    this.filterSettings.with_genres = value;
-    this.tmdbService
-      .discoverMovie(this.filterSettings)
-      .subscribe((response) => {
-        this.movies = response.results;
-      });
+  onGenreChanged(genre: string): void {
+    this.filterSettings = { ...this.filterSettings, with_genres: genre };
+    this._store.dispatch(movieActions.loadMovies({ filters: this.filterSettings }));
   }
 
-  onYearsChanged(value: string): void {
-    this.filterSettings.primary_release_year = value;
-    this.tmdbService
-      .discoverMovie(this.filterSettings)
-      .subscribe((response) => {
-        this.movies = response.results;
-      });
+  onYearChanged(releaseDate: string): void {
+    this.filterSettings = { ...this.filterSettings, primary_release_year: releaseDate };
+    this._store.dispatch(movieActions.loadMovies({ filters: this.filterSettings }));
   }
 
-  onSortByChanged(value: string): void {
-    this.filterSettings.sort_by = value;
-    this.tmdbService
-      .discoverMovie(this.filterSettings)
-      .subscribe((response) => {
-        this.movies = response.results;
-      });
+  onSortByChanged(sortBy: string): void {
+    this.filterSettings = { ...this.filterSettings, sort_by: sortBy };
+    this._store.dispatch(movieActions.loadMovies({ filters: this.filterSettings }));
   }
 
   addToWatchlist(movie: IMovie): void {
     console.log(this.currentUser.uid);
-    this.dataStorageService.addMediaToWatchlist(movie, this.currentUser.uid, (error) => {
+    this._dataStorageService.addMediaToWatchlist(movie, this.currentUser.uid, (error) => {
       if (error) {
         console.log(error);
       } else {
@@ -83,12 +82,17 @@ export class MoviesListComponent implements OnInit {
 
   addToFavorites(movie: IMovie): void {
     console.log(this.currentUser.uid);
-    this.dataStorageService.addMediaToFavorite(movie, this.currentUser.uid, (error) => {
+    this._dataStorageService.addMediaToFavorite(movie, this.currentUser.uid, (error) => {
       if (error) {
         console.log(error);
       } else {
         console.log('Added to Favorites');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

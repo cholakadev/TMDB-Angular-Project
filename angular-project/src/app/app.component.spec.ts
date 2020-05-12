@@ -1,35 +1,45 @@
-import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { AppComponent } from './app.component';
+import { DebugElement } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
 
-describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+describe('App Component', () => {
+    let fixture: ComponentFixture<AppComponent>;
+    let component: AppComponent;
+    let debugElement: DebugElement;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                AppComponent,
+            ],
+            imports: [
+                AngularFireModule.initializeApp(environment.firebase),
+                RouterTestingModule,
+            ],
+            providers: [
+                provideMockStore(),
+            ]
+        });
 
-  it(`should have as title 'angular-project'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-project');
-  });
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.componentInstance;
+        debugElement = fixture.debugElement;
+        fixture.detectChanges();
+    });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('angular-project app is running!');
-  });
+    it('should create component', () => {
+        expect(component)
+            .toBeTruthy();
+    });
+
+    it('brand should be TMDB', () => {
+        expect(debugElement
+            .nativeElement
+            .querySelector('.navbar-brand').textContent)
+            .toEqual('TMDB');
+    });
 });

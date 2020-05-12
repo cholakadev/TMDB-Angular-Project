@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ITvSerie } from 'src/app/interfaces/tvseries';
 import { ActivatedRoute } from '@angular/router';
 import { TmdbService } from 'src/app/services/tmdb/tmdb.service';
@@ -8,20 +8,19 @@ import { TmdbService } from 'src/app/services/tmdb/tmdb.service';
   templateUrl: './tv-show-details.component.html',
   styleUrls: ['./tv-show-details.component.scss'],
 })
-export class TvShowDetailsComponent implements OnInit {
+export class TvShowDetailsComponent {
   tvshow: ITvSerie;
-  routerParameterId: number;
+  routeParameterId: number;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private tmdbService: TmdbService
+    private _activatedRoute: ActivatedRoute,
+    private _tmdbService: TmdbService
   ) {
-    this.routerParameterId = activatedRoute.snapshot.params.id;
+    this.routeParameterId = this._activatedRoute.snapshot.params.id;
 
-    this.tmdbService.tvseries(this.routerParameterId).subscribe((response) => {
+    this._tmdbService.tvseries(this.routeParameterId).subscribe((response) => {
       this.tvshow = response;
     });
   }
 
-  ngOnInit(): void {}
 }

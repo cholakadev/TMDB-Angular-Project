@@ -1,10 +1,6 @@
-import { PeopleModule } from './pages/people/people.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { PeopleListComponent } from './pages/people/people-list/people-list.component';
-import { PeopleDetailsComponent } from './pages/people/people-details/people-details.component';
-import { AuthComponent } from './pages/auth/auth.component';
 
 
 const routes: Routes = [
@@ -14,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    component: AuthComponent
+    loadChildren: () => import('./pages/auth/auth.module').then(module => module.AuthModule)
   },
   {
     path: 'movies',

@@ -11,7 +11,8 @@ export class AuthService {
 
   public userState: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private _angularFireAuth: AngularFireAuth,
+  constructor(
+    private _angularFireAuth: AngularFireAuth,
     private angularFirestore: AngularFirestore) {
     this._angularFireAuth.authState.subscribe(
       user => {
@@ -37,7 +38,7 @@ export class AuthService {
     }
   }
 
-  logOut() {
+  logOut(): void {
     this._angularFireAuth
       .signOut()
       .then(() => {

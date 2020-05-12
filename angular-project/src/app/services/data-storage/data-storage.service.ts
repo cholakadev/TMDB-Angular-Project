@@ -20,7 +20,7 @@ export class DataStorageService {
     private angularFirestore: AngularFirestore
   ) { }
 
-  addMediaToWatchlist(media: IMovie | ITvSerie, userId: string, callback: (error?: string) => void) {
+  addMediaToWatchlist(media: IMovie | ITvSerie, userId: string, callback: (error?: string) => void): void {
     const mediaDetails: IFirestoreMedia = {
       id: media.id,
       createdAt: new Date(),
@@ -40,7 +40,7 @@ export class DataStorageService {
       .catch(error => callback(error))
   }
 
-  addMediaToFavorite(media: IMovie | ITvSerie, userId: string, callback: (error?: string) => void) {
+  addMediaToFavorite(media: IMovie | ITvSerie, userId: string, callback: (error?: string) => void): void {
     const mediaDetails: IFirestoreMedia = {
       id: media.id,
       createdAt: new Date(),

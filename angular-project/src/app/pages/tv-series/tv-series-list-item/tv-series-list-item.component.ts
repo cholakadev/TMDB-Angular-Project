@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ITvSerie } from 'src/app/interfaces/tvseries';
 import { Router } from '@angular/router';
 
@@ -7,14 +7,13 @@ import { Router } from '@angular/router';
   templateUrl: './tv-series-list-item.component.html',
   styleUrls: ['./tv-series-list-item.component.scss'],
 })
-export class TvSeriesListItemComponent implements OnInit {
+export class TvSeriesListItemComponent {
   @Input() tvshow: ITvSerie;
 
-  constructor(private router: Router) {}
+  constructor(
+    private _router: Router) { }
 
-  ngOnInit(): void {}
-
-  redirect() {
-    this.router.navigate(['/tv-series', this.tvshow.id]);
+  redirect(): void {
+    this._router.navigate(['/tv-series', this.tvshow.id]);
   }
 }

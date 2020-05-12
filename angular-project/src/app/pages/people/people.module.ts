@@ -3,25 +3,30 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PeopleRoutingModule } from './people-routing.module';
-import { PeopleComponent } from './people.component';
 import { PeopleDetailsComponent } from './people-details/people-details.component';
 import { PeopleListItemComponent } from './people-list-item/people-list-item.component';
 import { PeopleListComponent } from './people-list/people-list.component';
-import { FilterPipe } from 'src/app/pipes/filter/filter.pipe';
+import { StoreModule } from '@ngrx/store';
+import * as peopleState from './people-store';
+import { EffectsModule } from '@ngrx/effects';
+import { PeopleEffects } from './people-store/people.effects';
 
 
 @NgModule({
   declarations: [
-    PeopleComponent,
     PeopleListComponent,
     PeopleListItemComponent,
     PeopleDetailsComponent,
-    FilterPipe
   ],
   imports: [
     CommonModule,
     PeopleRoutingModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forFeature(
+      peopleState.peopleStateFeatureKey,
+      [peopleState.reducers, peopleState.personDetailsReducer, peopleState.personCombinedCreditsReducer]
+    ),
+    EffectsModule.forFeature([PeopleEffects])
   ]
 })
 export class PeopleModule { }

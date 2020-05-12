@@ -1,3 +1,4 @@
+import { FilterPipe } from 'src/app/pipes/filter/filter.pipe';
 import { FiltersComponent } from 'src/app/pages/shared/filters/filters.component';
 import { NgModule } from '@angular/core';
 import { ImgFallbackDirective } from '../../directives/img-fallback/img-fallback.directive';
@@ -9,14 +10,16 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     declarations: [
         FiltersComponent,
         ImgFallbackDirective,
+        FilterPipe
     ],
     exports: [
         BsDropdownModule,
+        FilterPipe,
         ImgFallbackDirective,
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        FiltersComponent
+        FiltersComponent,
     ],
     imports: [
         CommonModule,
